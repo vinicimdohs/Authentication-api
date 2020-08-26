@@ -1,8 +1,10 @@
 const express = require('express');
-const userRouter = express.Router();
+const {validateBody,schemas} = require('../helpers/routeHelpers');
 const {singup,singin,secret} = require('../controllers/usersController');
 
-userRouter.post('/singup',singup);
+const userRouter = express.Router();
+
+userRouter.post('/singup',validateBody(schemas.authSchema),singup);
 
 userRouter.post('/signin',singin);
 
