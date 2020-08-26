@@ -1,9 +1,23 @@
+const User = require('../models/UserModel');
+
+
 module.exports = {
     singup: async(req,res,next)=>{
         try{
-            //email and pass
-            console.log('User Controller singUp Called')
-            res.send(req.value.body);
+            //email and pass          
+            const {email,password} = req.value.body;
+
+            //if there is a user whith the same email
+            const foundUser = await User.findOne({email});
+            if(foundUser){
+                return res.status(403).send({error: 'Email existente'});
+            }
+            //create a new user
+            const newUser = new User({email,password});
+            await newUser.save();
+
+            //responder com o token
+            res.send(newUser);
         }catch(e){
             res.status(500).send(e);
         }
