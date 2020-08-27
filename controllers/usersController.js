@@ -1,5 +1,14 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
 
+signToken = (user) => {
+    return jwt.sign({
+        iss:'ViniciusF',
+        sub: user.id,
+        iat: new Date().getTime(),//current
+        exp: new Date().setDate(new Date().getDate() + 1)//current + 1day
+    },process.env.TOKEN_SECRET);
+}
 
 module.exports = {
     singup: async(req,res,next)=>{
@@ -17,7 +26,9 @@ module.exports = {
             await newUser.save();
 
             //responder com o token
-            res.send(newUser);
+            const token = signToken(newUser);
+            res.status(200).json({token});
+
         }catch(e){
             res.status(500).send(e);
         }
