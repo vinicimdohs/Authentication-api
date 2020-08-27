@@ -35,8 +35,11 @@ module.exports = {
     },singin: async(req,res,next)=>{
         try{
             //generate token
-            console.log('User Controller singin Called')
-            res.send('User Controller singin Called');
+            const token = signToken(req.user);
+
+            console.log('successful login')
+            res.status(200).json({token});
+            
         }catch(e){
             res.status(500).send(e);
         }
