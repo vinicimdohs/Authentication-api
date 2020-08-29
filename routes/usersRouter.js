@@ -1,6 +1,6 @@
 const express = require('express');
 const {validateBody,schemas} = require('../helpers/routeHelpers');
-const {singup,singin,secret} = require('../controllers/usersController');
+const {singup,singin,secret,googleOAuth} = require('../controllers/usersController');
 
 const passportConfig = require('../passport');
 const passport = require('passport');
@@ -16,5 +16,7 @@ userRouter.post('/signin',validateBody(schemas.authSchema),passport.authenticate
 //get
 userRouter.get('/secret',passport.authenticate('jwt',{session:false}) ,secret);
 
+//
+userRouter.post('/oauth/google',passport.authenticate('googleToken',{session:false}),googleOAuth);
 
 module.exports = userRouter;
